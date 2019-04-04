@@ -97,7 +97,7 @@ class FullyConnectedNet(object):
               f'regularization : {self.regularization}, '
               f'adaptive_lr : {self.adaptive_lr})')
 
-    def train(self, epochs=100, batch_size=1000):
+    def train(self, epochs=500, batch_size=1000):
         print(f'Training net on {len(self.x_train)} samples, '
               f'validating on {len(self.x_val)} samples')
 
@@ -158,8 +158,8 @@ class FullyConnectedNet(object):
                     val_loss = self.loss.eval(feed_dict=feed_dict)
                     val_acc = self.accuracy.eval(feed_dict=feed_dict)
 
-                    print(f"train_loss = {train_loss:<10.6f}"
-                          f"train_acc = {train_acc:<10.6f}"
+                    print(f"loss = {train_loss:<10.6f}"
+                          f"acc = {train_acc:<10.6f}"
                           f"val_loss = {val_loss:<10.6f}"
                           f"val_acc = {val_acc:<10.6f}", end='')
 
