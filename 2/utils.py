@@ -28,8 +28,8 @@ def load_images(path, n):
             except OSError:
                 pass
             if j % 1000 == 0:
-                print('.', end='')
-        print()
+                print('.', end='', flush=True)
+        print(flush=True)
     return np.array(labels), np.array(x), np.array(y)
 
 
@@ -46,21 +46,21 @@ def remove_duplicates(img_train, labels_train, img_test):
 
 
 def load_not_mnist_data(path='data/not_mnist/', use_cache=True):
+    train_folder = Path(path) / 'notMNIST_large'
+    test_folder = Path(path) / 'notMNIST_small'
+
     train_cache_file = Path(path) / 'train.npz'
     test_cache_file = Path(path) / 'test.npz'
 
     if train_cache_file.exists() and test_cache_file.exists() and use_cache:
-        print('Loading cached arrays')
         labels, img_train, labels_train = np.load(train_cache_file).values()
         labels, img_test, labels_test = np.load(test_cache_file).values()
+        print('Loaded cached arrays')
 
     else:
-        test_folder = Path(path) / 'small'
-        train_folder = Path(path) / 'large'
-        labels, img_train, labels_train = load_images(test_folder, 10000000)
-        labels, img_test, labels_test = load_images(train_folder, 10000)
+        labels, img_train, labels_train = load_images(train_folder, 10000000)
+        labels, img_test, labels_test = load_images(test_folder, 10000000)
         np.savez(train_cache_file, labels, img_train, labels_train)
         np.savez(test_cache_file, labels, img_test, labels_test)
 
-    img_train, labels_train = remove_duplicates(img_train, labels_train, img_test)
     return labels, img_train, labels_train, img_test, labels_test
