@@ -13,7 +13,7 @@ small_url = 'https://commondatastorage.googleapis.com/books1000/notMNIST_small.t
 
 def download_data():
     if not os.path.exists(out_dir):
-        os.mkdir(out_dir)
+        os.makedirs(out_dir)
 
     if not os.path.exists(small_arhive):
         print(f"Downloading {small_arhive}.")
