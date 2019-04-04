@@ -97,7 +97,7 @@ class FullyConnectedNet(object):
               f'regularization : {self.regularization}, '
               f'adaptive_lr : {self.adaptive_lr})')
 
-    def train(self, epochs=10, batch_size=10000):
+    def train(self, epochs=200, batch_size=10000):
         print(f'Training net on {len(self.x_train)} samples, '
               f'validating on {len(self.x_val)} samples')
 
@@ -118,6 +118,9 @@ class FullyConnectedNet(object):
                     "val_loss": [],
                     "val_acc": []
                 }
+
+                best_loss = 1e10
+                started = time()
                 for epoch in range(epochs):
                     print(f"Epoch #{epoch:<4} [", end='')
 
@@ -157,21 +160,26 @@ class FullyConnectedNet(object):
                     print(f"train_loss = {train_loss:<12.6f}"
                           f"train_acc = {train_acc:<12.6f}"
                           f"val_loss = {val_loss:<12.6f}"
-                          f"val_acc = {val_acc:<12.6f}")
+                          f"val_acc = {val_acc:<12.6f}", end='')
 
                     history['loss'].append(float(train_loss))
                     history['acc'].append(float(train_loss))
                     history['val_loss'].append(float(val_loss))
                     history['val_acc'].append(float(val_acc))
-            except KeyboardInterrupt:
-                pass
 
+                    if best_loss > val_loss:
+                        best_loss = val_loss
+                        self.saver.save(session, self.model_path)
+                        print('model saved.', end='')
+                    print()
+
+            except KeyboardInterrupt:
+                print()
+
+            history['train_time'] = float(time() - started)
             with open(self.history_path, 'w+') as f:
                 json.dump(history, f, indent=4)
                 print(f'Saved history to {self.model_path}')
-
-            self.saver.save(session, self.model_path)
-            print(f'Saved model to {self.model_path}')
 
     def test(self):
         print(f'Evaluating accuracy of net on {len(self.x_test)} samples')
@@ -211,15 +219,15 @@ if __name__ == '__main__':
     if args.net == 'basic':
         net = FullyConnectedNet(
             labels, img_train, labels_train, img_test, labels_test,
-            model_path='models/not_mnist_fully_connected_net_basic/model',
-            results_path='results/not_mnist_fully_connected_net_basic.json',
+            model_path='models/not_mnist_fc_net_basic/model',
+            results_path='results/not_mnist_fc_net_basic.json',
         )
 
     elif args.net == 'dropout':
         net = FullyConnectedNet(
             labels, img_train, labels_train, img_test, labels_test,
-            model_path='models/not_mnist_fully_connected_net_dropout/model',
-            results_path='results/not_mnist_fully_connected_net_dropout.json',
+            model_path='models/not_mnist_fc_net_dropout/model',
+            results_path='results/not_mnist_fc_net_dropout.json',
             dropout=True,
             regularization=True
         )
@@ -227,8 +235,8 @@ if __name__ == '__main__':
     if args.net == 'adaptive_lr':
         net = FullyConnectedNet(
             labels, img_train, labels_train, img_test, labels_test,
-            model_path='models/not_mnist_fully_connected_net_adaptive_lr/model',
-            results_path='results/not_mnist_fully_connected_net_adaptive_lr.json',
+            model_path='models/not_mnist_fc_net_adaptive_lr/model',
+            results_path='results/not_mnist_fc_net_adaptive_lr.json',
             learning_rate=1e-3,
             dropout=True,
             regularization=True,

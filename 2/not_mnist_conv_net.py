@@ -110,8 +110,8 @@ if __name__ == '__main__':
     if args.net == 'basic':
         net = SimpleConvolutionalNN(
             labels, img_train, labels_train, img_test, labels_test,
-            model_path='models/not_mnist_convolutional_net_basic/model',
-            results_path='results/not_mnist_convolutional_net_basic.json',
+            model_path='models/not_mnist_conv_net_basic/model',
+            results_path='results/not_mnist_conv_net_basic.json',
         )
 
     print()
