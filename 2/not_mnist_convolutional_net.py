@@ -37,11 +37,10 @@ class SimpleConvolutionalNN(object):
 
     def init_nn(self):
         self.model = keras.Sequential()
-        self.model.add(keras.layers.Conv2D(8, 5, activation='relu', input_shape=self.n))
-        self.model.add(keras.layers.Conv2D(8, 5, activation='relu'))
+        self.model.add(keras.layers.Conv2D(16, 5, activation='relu', input_shape=self.n))
+        self.model.add(keras.layers.Conv2D(16, 5, activation='relu'))
         self.model.add(keras.layers.Flatten())
-        self.model.add(keras.layers.Dropout(rate=0.1))
-        self.model.add(keras.layers.Dense(50, activation='relu'))
+        self.model.add(keras.layers.Dense(100, activation='relu'))
         self.model.add(keras.layers.Dropout(rate=0.1))
         self.model.add(keras.layers.Dense(self.y_train.shape[1], activation='softmax'))
 
@@ -54,14 +53,17 @@ class SimpleConvolutionalNN(object):
         print('Initialized basic net:')
         self.model.summary()
 
-    def train(self, epochs=10, batch_size=100):
+    def train(self, epochs=100, batch_size=1000):
         try:
             self.model.fit(
-                self.x_train[:1000],
-                self.y_train[:1000],
+                self.x_train,
+                self.y_train,
                 epochs=epochs,
                 batch_size=batch_size,
-                validation_data=(self.x_val, self.y_val)
+                validation_data=(self.x_val, self.y_val),
+                callbacks=[
+                    keras.callbacks.EarlyStopping(patience=10)
+                ]
             )
         except KeyboardInterrupt:
             print()

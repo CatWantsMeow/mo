@@ -53,8 +53,10 @@ def load_not_mnist_data(path='data/not_mnist/', use_cache=True):
     test_cache_file = Path(path) / 'test.npz'
 
     if train_cache_file.exists() and test_cache_file.exists() and use_cache:
-        labels, img_train, labels_train = np.load(train_cache_file).values()
-        labels, img_test, labels_test = np.load(test_cache_file).values()
+        f = np.load(train_cache_file)
+        labels, img_train, labels_train = f.values() if hasattr(f, 'values') else f
+        f = np.load(test_cache_file)
+        labels, img_test, labels_test = f.values() if hasattr(f, 'values') else f
         print('Loaded cached arrays')
 
     else:
