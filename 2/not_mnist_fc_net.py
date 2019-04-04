@@ -157,10 +157,10 @@ class FullyConnectedNet(object):
                     val_loss = self.loss.eval(feed_dict=feed_dict)
                     val_acc = self.accuracy.eval(feed_dict=feed_dict)
 
-                    print(f"train_loss = {train_loss:<9.6f}"
-                          f"train_acc = {train_acc:<9.6f}"
-                          f"val_loss = {val_loss:<9.6f}"
-                          f"val_acc = {val_acc:<9.6f}", end='')
+                    print(f"train_loss = {train_loss:<10.6f}"
+                          f"train_acc = {train_acc:<10.6f}"
+                          f"val_loss = {val_loss:<10.6f}"
+                          f"val_acc = {val_acc:<10.6f}", end='')
 
                     history['loss'].append(float(train_loss))
                     history['acc'].append(float(train_loss))

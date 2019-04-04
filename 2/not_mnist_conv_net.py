@@ -177,7 +177,7 @@ if __name__ == '__main__':
         )
 
     print()
-    # if net and args.action == 'train':
-    #     net.train()
-    # elif net and args.action == 'test':
-    #     net.test()
+    if net and args.action == 'train':
+        net.train()
+    elif net and args.action == 'test':
+        net.test()
