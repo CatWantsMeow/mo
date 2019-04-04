@@ -172,8 +172,8 @@ if __name__ == '__main__':
     elif args.net == 'lenet':
         net = LeNet(
             labels, img_train, labels_train, img_test, labels_test,
-            model_path='models/not_mnist_conv_net_pooling/model',
-            results_path='results/not_mnist_conv_net_pooling.json',
+            model_path='models/not_mnist_conv_net_lenet/model',
+            results_path='results/not_mnist_conv_net_lenet.json',
         )
 
     print()

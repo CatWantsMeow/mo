@@ -97,7 +97,7 @@ class FullyConnectedNet(object):
               f'regularization : {self.regularization}, '
               f'adaptive_lr : {self.adaptive_lr})')
 
-    def train(self, epochs=200, batch_size=10000):
+    def train(self, epochs=100, batch_size=1000):
         print(f'Training net on {len(self.x_train)} samples, '
               f'validating on {len(self.x_val)} samples')
 
@@ -120,6 +120,7 @@ class FullyConnectedNet(object):
                 }
 
                 best_loss = 1e10
+                no_improvement = 0
                 started = time()
                 for epoch in range(epochs):
                     print(f"Epoch #{epoch:<4} [", end='')
@@ -168,10 +169,15 @@ class FullyConnectedNet(object):
                     history['val_acc'].append(float(val_acc))
 
                     if best_loss > val_loss:
+                        no_improvement = 0
                         best_loss = val_loss
                         self.saver.save(session, self.model_path)
                         print('model saved.', end='')
                     print()
+
+                    no_improvement += 1
+                    if no_improvement > 10:
+                        break
 
             except KeyboardInterrupt:
                 print()
