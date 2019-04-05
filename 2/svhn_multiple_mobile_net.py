@@ -52,8 +52,10 @@ class MobileNet(object):
             pooling='avg'
         )
 
+        dropout = keras.layers.Dropout(rate=0.1)(mobile_net.output)
+
         outputs = [
-            keras.layers.Dense(11, activation='softmax', name=f'out_{i}')(mobile_net.output)
+            keras.layers.Dense(11, activation='softmax', name=f'out_{i}')(dropout)
             for i in range(6)
         ]
 
