@@ -3,13 +3,14 @@
 import argparse
 import json
 import os
-from time import time
-
-import tensorflow as tf
 import numpy as np
+import tensorflow as tf
 
+from time import time
 from sklearn.model_selection import train_test_split
-from utils import load_not_mnist_data, remove_duplicates, flatten, to_one_hot
+
+from utils import flatten, to_one_hot
+from not_mnist_preprocess import load_not_mnist_data, remove_duplicates
 
 
 tf.logging.set_verbosity(tf.logging.ERROR)
@@ -251,6 +252,5 @@ if __name__ == '__main__':
 
     if net and args.action == 'train':
         net.train()
-
     elif net and args.action == 'test':
         net.test()

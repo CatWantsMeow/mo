@@ -3,14 +3,15 @@
 import argparse
 import json
 import os
-from time import time
-
 import numpy as np
 import tensorflow as tf
 
+from time import time
 from tensorflow import keras
 from sklearn.model_selection import train_test_split
-from utils import load_not_mnist_data, remove_duplicates, flatten, to_one_hot
+
+from utils import to_one_hot
+from not_mnist_preprocess import load_not_mnist_data, remove_duplicates
 
 
 tf.logging.set_verbosity(tf.logging.ERROR)

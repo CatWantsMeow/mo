@@ -11,11 +11,12 @@ from sklearn.linear_model import SGDClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 
-from utils import load_not_mnist_data, remove_duplicates, flatten
+from utils import flatten
+from not_mnist_preprocess import load_not_mnist_data, remove_duplicates
 
 
-model_path = 'models/not_mnist_linear_regression.model'
-results_path = 'results/not_mnist_linear_regression.json'
+model_path = 'models/not_mnist_logistic_regression.model'
+results_path = 'results/not_mnist_logistic_regression.json'
 
 
 def load_data():
