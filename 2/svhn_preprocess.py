@@ -29,7 +29,7 @@ def load_single_digit_data(dir='data/svhn', extra=False, greyscale=True):
     def to_x(a):
         a = np.array([a[:,:,:,i] for i in range(a.shape[3])])
         if greyscale:
-            return np.mean(a, axis=-1, keepdims=True)
+            return np.mean(a, axis=-1, keepdims=True).astype(np.uint8)
         return a
 
     def to_y(a):
