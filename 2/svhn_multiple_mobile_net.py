@@ -69,7 +69,7 @@ class MobileNet(object):
 
         print('Initialized mobile net')
 
-    def train(self, epochs=100, batch_size=100):
+    def train(self, epochs=100, batch_size=32):
         started = time()
         try:
             self.model.fit(
