@@ -117,6 +117,14 @@ if __name__ == '__main__':
             results_path='results/svhn_mnist_conv_net_mnist.json',
         )
 
+    elif args.data == 'svhn':
+        x_train, y_train, x_test, y_test, _, _ = load_single_digit_data(train=True, extra=False)
+        net = ConvNet(
+            x_train, y_train, x_test, y_test,
+            model_path='models/svhn_mnist_conv_net_mnist/model',
+            results_path='results/svhn_mnist_conv_net_mnist.json',
+        )
+
     print()
     if net and args.action == 'train':
         net.train()
