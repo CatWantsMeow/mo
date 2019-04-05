@@ -46,6 +46,7 @@ class MobileNet(object):
         input = keras.layers.Input(shape=(96, 96, 3))
 
         mobile_net = keras.applications.mobilenet_v2.MobileNetV2(
+            include_top=False,
             weights='imagenet',
             input_shape=(96, 96, 3),
             input_tensor=input,
