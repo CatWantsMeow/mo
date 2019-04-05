@@ -111,7 +111,8 @@ if __name__ == '__main__':
 
     net = None
     if args.data == 'mnist':
-        x_train, y_train, x_test, y_test = load_mnist()
+        x_train, y_train, _, _ = load_mnist()
+        _, _, x_test, y_test, _, _ = load_single_digit_data(extra=False)
         net = ConvNet(
             x_train, y_train, x_test, y_test,
             model_path='models/svhn_mnist_conv_net_mnist/model',
@@ -124,6 +125,14 @@ if __name__ == '__main__':
             x_train, y_train, x_test, y_test,
             model_path='models/svhn_mnist_conv_net_svhn/model',
             results_path='results/svhn_mnist_conv_net_svhn.json',
+        )
+
+    elif args.data == 'svhn_extra':
+        x_train, y_train, x_test, y_test, x_extra, y_extra = load_single_digit_data(extra=True)
+        net = ConvNet(
+            np.concatenate(x_train, x_extra), np.concatenate(y_train, y_extra), x_test, y_test,
+            model_path='models/svhn_mnist_conv_net_svhn_extra/model',
+            results_path='results/svhn_mnist_conv_net_svhn_extra.json',
         )
 
     print()
