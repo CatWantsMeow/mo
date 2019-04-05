@@ -64,7 +64,8 @@ class MobileNet(object):
         self.model.compile(
             optimizer=keras.optimizers.Adam(lr=self.lr),
             loss='categorical_crossentropy',
-            metrics=['categorical_accuracy']
+            metrics=['categorical_accuracy'],
+            loss_weights=[1, 1, 0.5, 0.3, 0.1, 0.05]
         )
 
         print('Initialized mobile net')
@@ -130,7 +131,7 @@ if __name__ == '__main__':
             results_path='results/svhn_multiple_mobile_net_basic.json',
         )
 
-    if net and args.action == 'train':
-        net.train()
-    elif net and args.action == 'test':
-        net.test()
+    # if net and args.action == 'train':
+    #     net.train()
+    # elif net and args.action == 'test':
+    #     net.test()
