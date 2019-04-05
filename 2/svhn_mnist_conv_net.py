@@ -43,7 +43,9 @@ class ConvNet(object):
             keras.layers.Conv2D(64, 5, activation='relu', padding='same'),
             keras.layers.MaxPool2D(pool_size=(2, 2), padding='same'),
             keras.layers.Flatten(),
+            keras.layers.Dropout(rate=0.1),
             keras.layers.Dense(100, activation='relu'),
+            keras.layers.Dropout(rate=0.1),
             keras.layers.Dense(self.y_train.shape[1], activation='softmax')
         ])
 
@@ -109,8 +111,7 @@ if __name__ == '__main__':
 
     net = None
     if args.data == 'mnist':
-        x_train, y_train, _, _ = load_mnist()
-        _, _, x_test, y_test, _, _ = load_single_digit_data(train=False, extra=False)
+        x_train, y_train, x_test, y_test = load_mnist()
         net = ConvNet(
             x_train, y_train, x_test, y_test,
             model_path='models/svhn_mnist_conv_net_mnist/model',
@@ -118,7 +119,7 @@ if __name__ == '__main__':
         )
 
     elif args.data == 'svhn':
-        x_train, y_train, x_test, y_test, _, _ = load_single_digit_data(train=True, extra=False)
+        x_train, y_train, x_test, y_test, _, _ = load_single_digit_data(extra=False)
         net = ConvNet(
             x_train, y_train, x_test, y_test,
             model_path='models/svhn_mnist_conv_net_svhn/model',

@@ -25,7 +25,7 @@ def load_mnist():
     return x_train, y_train, x_test, y_test
 
 
-def load_single_digit_data(dir='data/svhn', train=True, extra=False, greyscale=True):
+def load_single_digit_data(dir='data/svhn', extra=False, greyscale=True):
     def to_x(a):
         a = np.array([a[:,:,:,i] for i in range(a.shape[3])])
         if greyscale:
@@ -42,7 +42,7 @@ def load_single_digit_data(dir='data/svhn', train=True, extra=False, greyscale=T
         cache_file = Path(dir) / f"{file}.cache.npz"
         if cache_file.exists():
             f = np.load(cache_file)
-            print('Loaded cached arrays')
+            print(f'Loaded cached arrays for {file}')
             return [v for k, v in f.items()]
 
         f = io.loadmat(Path(dir) / file)
@@ -51,13 +51,10 @@ def load_single_digit_data(dir='data/svhn', train=True, extra=False, greyscale=T
         print(f'Loaded and processed {file}')
         return x, y
 
-    x_train, y_train = None, None
-    x_extra, y_extra = None, None
+    x_train, y_train = load_file('train_32x32.mat')
     x_test, y_test = load_file('test_32x32.mat')
 
-    if train:
-        x_train, y_train = load_file('train_32x32.mat')
-
+    x_extra, y_extra = None, None
     if extra:
         x_extra, y_extra = load_file('extra_32x32.mat')
 
