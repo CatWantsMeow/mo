@@ -81,7 +81,10 @@ class MobileNet(object):
                 batch_size=batch_size,
                 validation_data=(self.x_val, self.y_val),
                 callbacks=[
-                    keras.callbacks.EarlyStopping(patience=10)
+                    keras.callbacks.EarlyStopping(
+                        patience=10,
+                        restore_best_weights=True
+                    )
                 ]
             )
         except KeyboardInterrupt:
@@ -106,9 +109,9 @@ class MobileNet(object):
 
         started = time()
         self.model.load_weights(self.model_path)
-        _, acc = self.model.evaluate(self.x_test, self.y_test)
-        print(f'Accuracy = {acc:.2f}')
-        history['test_acc'] = float(acc)
+        acc = self.model.evaluate(self.x_test, self.y_test)
+        print(f'Accuracy = {acc}')
+        # history['test_acc'] = float(acc)
         history['test_time'] = float(time() - started)
 
         with open(self.history_path, 'w+') as f:
