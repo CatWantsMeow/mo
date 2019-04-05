@@ -94,7 +94,7 @@ class ConvNet(object):
         started = time()
         self.model.load_weights(self.model_path)
         _, acc = self.model.evaluate(self.x_test, self.y_test)
-        print(f'Accuracy = {acc:.2f}')
+        print(f'Accuracy = {acc:.5f}')
         history['test_acc'] = float(acc)
         history['test_time'] = float(time() - started)
 

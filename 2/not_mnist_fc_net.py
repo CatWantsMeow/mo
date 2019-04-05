@@ -205,7 +205,7 @@ class FullyConnectedNet(object):
                 self.expected: self.y_test,
                 self.dropout_rate: 0
             })
-            print(f'Accuracy = {acc:.2f}')
+            print(f'Accuracy = {acc:.5f}')
             results['test_acc'] = float(acc)
             results['test_time'] = float(time() - started)
 

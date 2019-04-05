@@ -75,7 +75,7 @@ def test():
     started = time()
     y_pred = model.predict(x_test)
     acc = accuracy_score(y_test, y_pred)
-    print(f"Accuracy = {acc:.2f}")
+    print(f"Accuracy = {acc:.5f}")
 
     results["test_acc"] = acc
     results["test_time"] = time() - started
