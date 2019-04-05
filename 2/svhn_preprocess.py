@@ -132,12 +132,12 @@ def load_multiple_digits_data(dir='data/svhn', extra=False):
 
             img = Image.open(Path(dir) / name)
 
-            width = int(max(attrs[name]['height']))
-            heigth = int(max(attrs[name]['width']))
+            height = int(max(attrs[name]['height']))
+            width = int(max(attrs[name]['width']))
             left = max(int(min(attrs[name]['left'])) - 0.5 * width, 0)
-            top = max(int(min(attrs[name]['top'])) - 0.5 * width, 0)
+            top = max(int(min(attrs[name]['top'])) - 0.5 * height, 0)
             right = min(int(max(attrs[name]['left'])) + 1.5 * width, img.size[0])
-            bottom = min(int(max(attrs[name]['top'])) + 1.5 * heigth, img.size[1])
+            bottom = min(int(max(attrs[name]['top'])) + 1.5 * height, img.size[1])
 
             img = img.crop(box=(left, top, right, bottom))
             img = img.resize((96, 96))
