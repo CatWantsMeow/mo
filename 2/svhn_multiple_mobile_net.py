@@ -131,7 +131,7 @@ if __name__ == '__main__':
             results_path='results/svhn_multiple_mobile_net_basic.json',
         )
 
-    # if net and args.action == 'train':
-    #     net.train()
-    # elif net and args.action == 'test':
-    #     net.test()
+    if net and args.action == 'train':
+        net.train()
+    elif net and args.action == 'test':
+        net.test()
