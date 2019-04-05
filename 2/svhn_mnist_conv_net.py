@@ -130,7 +130,9 @@ if __name__ == '__main__':
     elif args.data == 'svhn_extra':
         x_train, y_train, x_test, y_test, x_extra, y_extra = load_single_digit_data(extra=True)
         net = ConvNet(
-            np.concatenate(x_train, x_extra), np.concatenate(y_train, y_extra), x_test, y_test,
+            np.concatenate((x_train, x_extra)),
+            np.concatenate((y_train, y_extra)),
+            x_test, y_test,
             model_path='models/svhn_mnist_conv_net_svhn_extra/model',
             results_path='results/svhn_mnist_conv_net_svhn_extra.json',
         )
