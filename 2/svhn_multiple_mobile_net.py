@@ -118,7 +118,7 @@ class MobileNet(object):
             total = np.logical_and(total, cur)
 
             acc = np.mean(cur.astype(np.int))
-            history[f'test_acc_out_{i}'] = acc
+            history[f'test_out_{i}_acc'] = acc
             print(f'Accuracy of out_{i} = {acc:.5f}')
 
         acc = np.mean(total.astype(np.int))
