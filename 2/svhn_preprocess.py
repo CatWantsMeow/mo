@@ -175,6 +175,5 @@ def load_multiple_digits_data(dir='data/svhn', extra=False):
     )
 
 
-
 if __name__ == '__main__':
     load_multiple_digits_data()

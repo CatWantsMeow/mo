@@ -68,6 +68,7 @@ class MobileNet(object):
         )
 
         print('Initialized mobile net')
+        self.model.summary()
 
     def train(self, epochs=100, batch_size=1000):
         started = time()
@@ -124,13 +125,13 @@ if __name__ == '__main__':
     if args.type == 'basic':
         x_train, y_train, x_test, y_test, _, _ = load_multiple_digits_data()
         net = MobileNet(
-            x_train, y_train, x_test, y_test,
+            x_train[:10000], y_train[:10000], x_test, y_test,
             outputs=6,
             model_path='models/svhn_multiple_mobile_net_basic/model',
             results_path='results/svhn_multiple_mobile_net_basic.json',
         )
 
-    if net and args.action == 'train':
-        net.train()
-    elif net and args.action == 'test':
-        net.test()
+    # if net and args.action == 'train':
+    #     net.train()
+    # elif net and args.action == 'test':
+    #     net.test()
