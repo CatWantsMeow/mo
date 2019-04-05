@@ -121,8 +121,8 @@ if __name__ == '__main__':
         x_train, y_train, x_test, y_test, _, _ = load_single_digit_data(train=True, extra=False)
         net = ConvNet(
             x_train, y_train, x_test, y_test,
-            model_path='models/svhn_mnist_conv_net_mnist/model',
-            results_path='results/svhn_mnist_conv_net_mnist.json',
+            model_path='models/svhn_mnist_conv_net_svhn/model',
+            results_path='results/svhn_mnist_conv_net_svhn.json',
         )
 
     print()
