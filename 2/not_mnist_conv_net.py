@@ -50,7 +50,7 @@ class SimpleConvNN(object):
         self.model.compile(
             optimizer=keras.optimizers.Adam(lr=self.lr),
             loss='categorical_crossentropy',
-            metrics=['accuracy']
+            metrics=['categorical_accuracy']
         )
 
         print('Initialized basic net:')
@@ -116,7 +116,7 @@ class MaxPoolingConvNN(SimpleConvNN):
         self.model.compile(
             optimizer=keras.optimizers.Adam(lr=self.lr),
             loss='categorical_crossentropy',
-            metrics=['accuracy']
+            metrics=['categorical_accuracy']
         )
 
         print('Initialized basic net:')
@@ -140,7 +140,7 @@ class LeNet(SimpleConvNN):
         self.model.compile(
             optimizer=keras.optimizers.Adam(lr=self.lr),
             loss='categorical_crossentropy',
-            metrics=['accuracy']
+            metrics=['categorical_accuracy']
         )
 
         print('Initialized basic net:')
