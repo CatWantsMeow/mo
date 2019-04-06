@@ -65,6 +65,7 @@ class ConvNet(object):
                 self.x_train,
                 self.y_train,
                 epochs=epochs,
+                verbose=2,
                 batch_size=batch_size,
                 validation_data=(self.x_val, self.y_val),
                 callbacks=[

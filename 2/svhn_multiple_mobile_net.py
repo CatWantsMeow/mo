@@ -20,6 +20,23 @@ def to_y(a, n):
     return [a[:,i,:] for i in range(n)]
 
 
+def freeze_session(session, keep_var_names=None, output_names=None, clear_devices=True):
+    from tensorflow.python.framework.graph_util import convert_variables_to_constants
+    graph = session.graph
+    with graph.as_default():
+        freeze_var_names = list(set(v.op.name for v in tf.global_variables()).difference(keep_var_names or []))
+        output_names = output_names or []
+        output_names += [v.op.name for v in tf.global_variables()]
+        # Graph -> GraphDef ProtoBuf
+        input_graph_def = graph.as_graph_def()
+        if clear_devices:
+            for node in input_graph_def.node:
+                node.device = ""
+        frozen_graph = convert_variables_to_constants(session, input_graph_def,
+                                                      output_names, freeze_var_names)
+        return frozen_graph
+
+
 class MobileNet(object):
 
     def __init__(self, x_train, y_train, x_val, y_val, x_test, y_test, **kwargs):
@@ -30,9 +47,10 @@ class MobileNet(object):
         self.x_test = x_test
         self.y_test = y_test
 
-        self.y_train = to_y(self.y_train, 6)
-        self.y_val = to_y(self.y_val, 6)
-        self.y_test = to_y(self.y_test, 6)
+        if self.y_train and self.y_val and self.y_test:
+            self.y_train = to_y(self.y_train, 6)
+            self.y_val = to_y(self.y_val, 6)
+            self.y_test = to_y(self.y_test, 6)
 
         self.lr = kwargs.pop('learning_rate', 1e-3)
         self.history_path = kwargs.pop('results_path')
@@ -133,9 +151,30 @@ class MobileNet(object):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('action', type=str, choices=['test', 'train'])
+    parser.add_argument('action', type=str, choices=['test', 'train', 'save'])
     parser.add_argument('data', type=str, choices=['basic', 'extra'])
     args = parser.parse_args()
+
+    if args.action == 'save':
+        keras.backend.set_learning_phase(0)
+
+        net = MobileNet(
+            None, None, None, None, None, None,
+            model_path='models/svhn_multiple_mobile_net_basic/model',
+            results_path='results/svhn_multiple_mobile_net_basic.json',
+        )
+        net.model.load_weights('models/svhn_multiple_mobile_net_basic/model')
+
+        for l in net.model.layers:
+            l.trainable = False
+
+
+        frozen_graph = freeze_session(
+            keras.backend.get_session(),
+            output_names=[out.op.name for out in net.model.outputs]
+        )
+        tf.train.write_graph(frozen_graph, "models", "svhn_classifier.pb", as_text=False)
+        exit()
 
     net = None
     if args.data == 'basic':
