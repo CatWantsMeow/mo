@@ -252,8 +252,8 @@ if __name__ == '__main__':
 
     elif args.data == 'augmented':
         if args.action == 'train':
-            _, _, x_test, y_test, x_train, y_train = load_multiple_digits_data(extra=True, train=False)
-            x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.1)
+            x_train, y_train, x_test, y_test, _, _ = load_multiple_digits_data(extra=False)
+            x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.3)
 
             net = MobileNet(
                 x_train, y_train, x_val, y_val, x_test, y_test,
@@ -269,8 +269,8 @@ if __name__ == '__main__':
 
             net = MobileNet(
                 x_train, y_train, x_val, y_val, x_test, y_test,
-                model_path='models/svhn_multiple_mobile_net_extra/model',
-                results_path='results/svhn_multiple_mobile_net_extra.json',
+                model_path='models/svhn_multiple_mobile_net_augmented/model',
+                results_path='results/svhn_multiple_mobile_net_augmented.json',
             )
             net.train()
 
