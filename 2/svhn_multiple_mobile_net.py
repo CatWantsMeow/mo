@@ -27,7 +27,7 @@ def freeze_session(session, keep_var_names=None, output_names=None, clear_device
         freeze_var_names = list(set(v.op.name for v in tf.global_variables()).difference(keep_var_names or []))
         output_names = output_names or []
         output_names += [v.op.name for v in tf.global_variables()]
-        # Graph -> GraphDef ProtoBuf
+
         input_graph_def = graph.as_graph_def()
         if clear_devices:
             for node in input_graph_def.node:
@@ -97,6 +97,7 @@ class MobileNet(object):
                 self.y_train,
                 epochs=epochs,
                 batch_size=batch_size,
+                verbose=2,
                 validation_data=(self.x_val, self.y_val),
                 callbacks=[
                     keras.callbacks.EarlyStopping(
@@ -116,6 +117,47 @@ class MobileNet(object):
 
         self.model.save_weights(self.model_path)
         print(f'Saved model to {self.model_path}')
+
+    def train_generator(self, epochs=100, batch_size=32):
+        datagen = keras.preprocessing.image.ImageDataGenerator(
+            featurewise_center=True,
+            featurewise_std_normalization=True,
+            rotation_range=20,
+            width_shift_range=0.5,
+            height_shift_range=0.5,
+            horizontal_flip=False,
+            vertical_flip=False,
+        )
+        datagen.fit(self.x_train)
+
+        started = time()
+        try:
+            self.model.fit_generator(
+                datagen.flow(self.x_train, self.y_train, batch_size=batch_size),
+                epochs=epochs,
+                steps_per_epoch=len(self.x_train) / batch_size,
+                verbose=1,
+                validation_data=(self.x_val, self.y_val),
+                callbacks=[
+                    keras.callbacks.EarlyStopping(
+                        patience=10,
+                        restore_best_weights=True
+                    )
+                ]
+            )
+        except KeyboardInterrupt:
+            print()
+
+        history = {k: [float(e) for e in v] for k, v in self.model.history.history.items()}
+        history['train_time'] = float(time() - started)
+        with open(self.history_path, 'w+') as f:
+            json.dump(history, f, indent=4)
+            print(f'Saved history to {self.history_path}')
+
+        self.model.save_weights(self.model_path)
+        print(f'Saved model to {self.model_path}')
+
+
 
     def test(self):
         print(f'Evaluating accuracy of net on {len(self.x_test)} samples')
@@ -152,7 +194,7 @@ class MobileNet(object):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('action', type=str, choices=['test', 'train', 'save'])
-    parser.add_argument('data', type=str, choices=['basic', 'extra'])
+    parser.add_argument('data', type=str, choices=['basic', 'extra', 'augmented'])
     args = parser.parse_args()
 
     if args.action == 'save':
@@ -207,6 +249,32 @@ if __name__ == '__main__':
                 model_path='models/svhn_multiple_mobile_net_extra/model',
                 results_path='results/svhn_multiple_mobile_net_extra.json',
             )
+
+    elif args.data == 'augmented':
+        if args.action == 'train':
+            _, _, x_test, y_test, x_train, y_train = load_multiple_digits_data(extra=True, train=False)
+            x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.1)
+
+            net = MobileNet(
+                x_train, y_train, x_val, y_val, x_test, y_test,
+                model_path='models/svhn_multiple_mobile_net_augmented/model',
+                results_path='results/svhn_multiple_mobile_net_augmented.json',
+            )
+            net.model.load_weights('models/svhn_multiple_mobile_net_extra/model')
+            net.train_generator()
+
+        else:
+            x_train, y_train, x_test, y_test, _, _ = load_multiple_digits_data(extra=False)
+            x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.1)
+
+            net = MobileNet(
+                x_train, y_train, x_val, y_val, x_test, y_test,
+                model_path='models/svhn_multiple_mobile_net_extra/model',
+                results_path='results/svhn_multiple_mobile_net_extra.json',
+            )
+            net.train()
+
+        exit()
 
     if net and args.action == 'train':
         net.train()
