@@ -34,7 +34,7 @@ def train():
         with open(results_path, 'r') as f:
             results = json.load(f)
 
-    results = results.setdefault('val_acc', {})
+    results.setdefault('val_acc', {})
     ns = [int(2 ** n) for n in np.arange(7, np.ceil(np.log2(len(x_train))) + 1)]
 
     print('Training Logistic Regression model:')
@@ -47,8 +47,9 @@ def train():
         model.fit(x_train[indices], y_train[indices])
 
         y_pred = model.predict(x_val)
-        results["val_acc"][n] = accuracy_score(y_val, y_pred)
-        print(f"n = {n}, accuracy = {results['val_acc'][n]:.2f}, iterations = {model.n_iter_}")
+        print(y_pred)
+        results["val_acc"][n] = acc = np.mean(np.equal(y_pred, y_val).astype(np.int))
+        print(f"n = {n}, accuracy = {acc:.5f}, iterations = {model.n_iter_}")
 
         with open(results_path, 'w+') as f:
             json.dump(results, f, indent=4)
@@ -74,7 +75,7 @@ def test():
 
     started = time()
     y_pred = model.predict(x_test)
-    acc = accuracy_score(y_test, y_pred)
+    acc = np.mean(np.equal(y_pred, y_test).astype(np.int))
     print(f"Accuracy = {acc:.5f}")
 
     results["test_acc"] = acc

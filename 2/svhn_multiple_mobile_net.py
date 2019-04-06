@@ -149,7 +149,7 @@ if __name__ == '__main__':
 
     elif args.data == 'extra':
         if args.action == 'train':
-            _, _, x_test, y_test, x_extra, y_extra = load_multiple_digits_data(extra=True)
+            _, _, x_test, y_test, x_extra, y_extra = load_multiple_digits_data(extra=True, train=False)
             net = MobileNet(
                 x_extra, y_extra, x_test, y_test,
                 model_path='models/svhn_multiple_mobile_net_extra/model',

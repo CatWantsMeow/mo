@@ -58,7 +58,7 @@ class ConvNet(object):
         print('Initialized basic net:')
         self.model.summary()
 
-    def train(self, epochs=100, batch_size=1000):
+    def train(self, epochs=100, batch_size=100):
         started = time()
         try:
             self.model.fit(
@@ -68,7 +68,10 @@ class ConvNet(object):
                 batch_size=batch_size,
                 validation_data=(self.x_val, self.y_val),
                 callbacks=[
-                    keras.callbacks.EarlyStopping(patience=10)
+                    keras.callbacks.EarlyStopping(
+                        patience=10,
+                        restore_best_weights=True
+                    )
                 ]
             )
         except KeyboardInterrupt:

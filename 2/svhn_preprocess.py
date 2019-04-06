@@ -70,7 +70,7 @@ def load_single_digit_data(dir='data/svhn', extra=False, greyscale=True):
     )
 
 
-def load_multiple_digits_data(dir='data/svhn', extra=False):
+def load_multiple_digits_data(dir='data/svhn', train=True, extra=False):
 
     def parse_digit_struct(file):
         if Path(f"{file}.cache.json").exists():
@@ -157,12 +157,16 @@ def load_multiple_digits_data(dir='data/svhn', extra=False):
                 print('.', end='', flush=True)
         print()
 
-        x, y = np.array(x, dtype=np.uint8), np.array(y, dtype=np.uint8)
+        x = np.array(x, dtype=np.uint8)
+        y = np.array(y, dtype=np.uint8)
         np.savez(Path(dir) / "cache.npz", x, y)
         return x, y
 
-    x_train, y_train = process_images(Path(dir) / 'train/')
     x_test, y_test = process_images(Path(dir) / 'test/')
+
+    x_train, y_train = None, None
+    if train:
+        x_train, y_train = process_images(Path(dir) / 'train/')
 
     x_extra, y_extra = None, None
     if extra:
