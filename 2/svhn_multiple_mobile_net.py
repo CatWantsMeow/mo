@@ -28,6 +28,7 @@ class MobileNet(object):
         self.x_test = x_test
         self.y_test = y_test
 
+        print('Splitting ...')
         self.x_train, self.x_val, self.y_train, self.y_val = \
             train_test_split(self.x_train, self.y_train, test_size=0.1)
 
