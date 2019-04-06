@@ -118,47 +118,6 @@ class MobileNet(object):
         self.model.save_weights(self.model_path)
         print(f'Saved model to {self.model_path}')
 
-    def train_generator(self, epochs=100, batch_size=32):
-        datagen = keras.preprocessing.image.ImageDataGenerator(
-            featurewise_center=True,
-            featurewise_std_normalization=True,
-            rotation_range=20,
-            width_shift_range=0.5,
-            height_shift_range=0.5,
-            horizontal_flip=False,
-            vertical_flip=False,
-        )
-        datagen.fit(self.x_train)
-
-        started = time()
-        try:
-            self.model.fit_generator(
-                datagen.flow(self.x_train, self.y_train, batch_size=batch_size),
-                epochs=epochs,
-                steps_per_epoch=len(self.x_train) / batch_size,
-                verbose=1,
-                validation_data=(self.x_val, self.y_val),
-                callbacks=[
-                    keras.callbacks.EarlyStopping(
-                        patience=10,
-                        restore_best_weights=True
-                    )
-                ]
-            )
-        except KeyboardInterrupt:
-            print()
-
-        history = {k: [float(e) for e in v] for k, v in self.model.history.history.items()}
-        history['train_time'] = float(time() - started)
-        with open(self.history_path, 'w+') as f:
-            json.dump(history, f, indent=4)
-            print(f'Saved history to {self.history_path}')
-
-        self.model.save_weights(self.model_path)
-        print(f'Saved model to {self.model_path}')
-
-
-
     def test(self):
         print(f'Evaluating accuracy of net on {len(self.x_test)} samples')
 
@@ -249,32 +208,6 @@ if __name__ == '__main__':
                 model_path='models/svhn_multiple_mobile_net_extra/model',
                 results_path='results/svhn_multiple_mobile_net_extra.json',
             )
-
-    elif args.data == 'augmented':
-        if args.action == 'train':
-            x_train, y_train, x_test, y_test, _, _ = load_multiple_digits_data(extra=False)
-            x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.3)
-
-            net = MobileNet(
-                x_train, y_train, x_val, y_val, x_test, y_test,
-                model_path='models/svhn_multiple_mobile_net_augmented/model',
-                results_path='results/svhn_multiple_mobile_net_augmented.json',
-            )
-            net.model.load_weights('models/svhn_multiple_mobile_net_extra/model')
-            net.train_generator()
-
-        else:
-            x_train, y_train, x_test, y_test, _, _ = load_multiple_digits_data(extra=False)
-            x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.1)
-
-            net = MobileNet(
-                x_train, y_train, x_val, y_val, x_test, y_test,
-                model_path='models/svhn_multiple_mobile_net_augmented/model',
-                results_path='results/svhn_multiple_mobile_net_augmented.json',
-            )
-            net.test()
-
-        exit()
 
     if net and args.action == 'train':
         net.train()
