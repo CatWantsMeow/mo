@@ -47,7 +47,7 @@ class MobileNet(object):
         self.x_test = x_test
         self.y_test = y_test
 
-        if self.y_train and self.y_val and self.y_test:
+        if self.y_train is not None and self.y_val is not None and self.y_test is not None:
             self.y_train = to_y(self.y_train, 6)
             self.y_val = to_y(self.y_val, 6)
             self.y_test = to_y(self.y_test, 6)
