@@ -22,15 +22,13 @@ def to_y(a, n):
 
 class MobileNet(object):
 
-    def __init__(self, x_train, y_train, x_test, y_test, **kwargs):
+    def __init__(self, x_train, y_train, x_val, y_val, x_test, y_test, **kwargs):
         self.x_train = x_train
         self.y_train = y_train
+        self.x_val = x_val
+        self.y_val = y_val
         self.x_test = x_test
         self.y_test = y_test
-
-        print('Splitting ...')
-        self.x_train, self.x_val, self.y_train, self.y_val = \
-            train_test_split(self.x_train, self.y_train, test_size=0.1)
 
         self.y_train = to_y(self.y_train, 6)
         self.y_val = to_y(self.y_val, 6)
@@ -142,17 +140,21 @@ if __name__ == '__main__':
     net = None
     if args.data == 'basic':
         x_train, y_train, x_test, y_test, _, _ = load_multiple_digits_data()
+        x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.1)
+
         net = MobileNet(
-            x_train, y_train, x_test, y_test,
+            x_train, y_train, x_val, y_val, x_test, y_test,
             model_path='models/svhn_multiple_mobile_net_basic/model',
             results_path='results/svhn_multiple_mobile_net_basic.json',
         )
 
     elif args.data == 'extra':
         if args.action == 'train':
-            _, _, x_test, y_test, x_extra, y_extra = load_multiple_digits_data(extra=True, train=False)
+            _, _, x_test, y_test, x_train, y_train = load_multiple_digits_data(extra=True, train=False)
+            x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.1)
+
             net = MobileNet(
-                x_extra, y_extra, x_test, y_test,
+                x_train, y_train, x_val, y_val, x_test, y_test,
                 model_path='models/svhn_multiple_mobile_net_extra/model',
                 results_path='results/svhn_multiple_mobile_net_extra.json',
             )
@@ -160,8 +162,10 @@ if __name__ == '__main__':
 
         else:
             x_train, y_train, x_test, y_test, _, _ = load_multiple_digits_data(extra=False)
+            x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.1)
+
             net = MobileNet(
-                x_train, y_train, x_test, y_test,
+                x_train, y_train, x_val, y_val, x_test, y_test,
                 model_path='models/svhn_multiple_mobile_net_extra/model',
                 results_path='results/svhn_multiple_mobile_net_extra.json',
             )
