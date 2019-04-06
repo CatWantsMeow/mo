@@ -160,14 +160,13 @@ if __name__ == '__main__':
 
         net = MobileNet(
             None, None, None, None, None, None,
-            model_path='models/svhn_multiple_mobile_net_basic/model',
-            results_path='results/svhn_multiple_mobile_net_basic.json',
+            model_path=None,
+            results_path=None,
         )
-        net.model.load_weights('models/svhn_multiple_mobile_net_basic/model')
+        net.model.load_weights(f'models/svhn_multiple_mobile_net_{args.data}/model')
 
         for l in net.model.layers:
             l.trainable = False
-
 
         frozen_graph = freeze_session(
             keras.backend.get_session(),
