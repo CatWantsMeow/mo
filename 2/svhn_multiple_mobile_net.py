@@ -272,7 +272,7 @@ if __name__ == '__main__':
                 model_path='models/svhn_multiple_mobile_net_augmented/model',
                 results_path='results/svhn_multiple_mobile_net_augmented.json',
             )
-            net.train()
+            net.test()
 
         exit()
 
