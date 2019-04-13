@@ -115,9 +115,9 @@ class FullyConnectedNet(object):
             try:
                 history = {
                     "loss": [],
-                    "acc": [],
+                    "categorical_accuracy": [],
                     "val_loss": [],
-                    "val_acc": []
+                    "val_categorical_accuracy": []
                 }
 
                 best_loss = 1e10
