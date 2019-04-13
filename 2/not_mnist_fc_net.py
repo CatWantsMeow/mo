@@ -165,8 +165,8 @@ class FullyConnectedNet(object):
                           f"val_acc = {val_acc:<10.6f}", end='')
 
                     history['loss'].append(float(train_loss))
-                    history['categorical_accuracy'].append(float(train_acc))
                     history['val_loss'].append(float(val_loss))
+                    history['categorical_accuracy'].append(float(train_acc))
                     history['val_categorical_accuracy'].append(float(val_acc))
 
                     if best_loss > val_loss:

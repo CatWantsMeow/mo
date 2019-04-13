@@ -7,8 +7,7 @@ import pickle
 import json
 
 from time import time
-from sklearn.linear_model import SGDClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.linear_model import SGDClassifier, LogisticRegression
 from sklearn.model_selection import train_test_split
 
 from utils import flatten
@@ -43,12 +42,12 @@ def train():
         if n < len(x_train):
             indices = np.random.choice(indices, n, replace=False)
 
-        model = SGDClassifier(loss='log', tol=1e-4, early_stopping=True)
+        # model = SGDClassifier(loss='log', tol=1e-4, early_stopping=True)
+        model = LogisticRegression(solver="saga", multi_class="multinomial")
         model.fit(x_train[indices], y_train[indices])
 
         y_pred = model.predict(x_val)
-        print(y_pred)
-        results["val_acc"][n] = acc = np.mean(np.equal(y_pred, y_val).astype(np.int))
+        results["val_acc"][str(n)] = acc = np.mean(np.equal(y_pred, y_val).astype(np.int))
         print(f"n = {n}, accuracy = {acc:.5f}, iterations = {model.n_iter_}")
 
         with open(results_path, 'w+') as f:
