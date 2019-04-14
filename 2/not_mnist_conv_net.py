@@ -38,11 +38,10 @@ class SimpleConvNN(object):
 
     def init_nn(self):
         self.model = keras.Sequential([
-            keras.layers.Conv2D(16, 5, activation='relu', input_shape=self.n, padding='same'),
+            keras.layers.Conv2D(16, 5, activation='relu', input_shape=self.n),
             keras.layers.Conv2D(16, 5, activation='relu'),
             keras.layers.Flatten(),
             keras.layers.Dense(100, activation='relu'),
-            keras.layers.Dropout(rate=0.1),
             keras.layers.Dropout(rate=0.1),
             keras.layers.Dense(self.y_train.shape[1], activation='softmax')
         ])
@@ -109,7 +108,7 @@ class MaxPoolingConvNN(SimpleConvNN):
     def init_nn(self):
         self.model = keras.Sequential([
             keras.layers.Conv2D(16, 5, activation='relu', input_shape=self.n, padding='same'),
-            keras.layers.MaxPool2D(pool_size=(2, 2), padding = 'same'),
+            keras.layers.MaxPool2D(pool_size=(2, 2), padding='same'),
             keras.layers.Flatten(),
             keras.layers.Dense(100, activation='relu'),
             keras.layers.Dropout(rate=0.1),
@@ -130,11 +129,11 @@ class LeNet(SimpleConvNN):
 
     def init_nn(self):
         self.model = keras.Sequential([
-            keras.layers.Conv2D(6, 5, activation='tanh', input_shape=self.n, padding='same'),
-            keras.layers.AvgPool2D(pool_size=(2, 2), padding = 'same'),
-            keras.layers.Conv2D(16, 5, activation='tanh', padding='same'),
-            keras.layers.AvgPool2D(pool_size=(2, 2), padding='same'),
-            keras.layers.Conv2D(120, 5, activation='tanh', padding='same'),
+            keras.layers.Conv2D(6, 5, activation='tanh', input_shape=self.n),
+            keras.layers.AvgPool2D(pool_size=(2, 2), strides=(2, 2)),
+            keras.layers.Conv2D(16, 5, activation='tanh'),
+            keras.layers.AvgPool2D(pool_size=(2, 2), strides=(2, 2)),
+            keras.layers.Conv2D(120, 4, activation='tanh'),
             keras.layers.Flatten(),
             keras.layers.Dense(84, activation='tanh'),
             keras.layers.Dense(self.y_train.shape[1], activation='softmax')
