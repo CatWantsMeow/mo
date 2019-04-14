@@ -246,7 +246,7 @@ if __name__ == '__main__':
             results_path='results/not_mnist_fc_net_adaptive_lr.json',
             learning_rate=1e-3,
             dropout=True,
-            regularization=True,
+            regularization=False,
             adaptive_lr=True
         )
 
