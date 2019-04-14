@@ -177,7 +177,7 @@ class FullyConnectedNet(object):
                     print()
 
                     no_improvement += 1
-                    if no_improvement > 10:
+                    if no_improvement > 20:
                         break
 
             except KeyboardInterrupt:
