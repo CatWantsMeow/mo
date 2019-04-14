@@ -35,28 +35,50 @@ class ConvNet(object):
         self.init_nn()
 
     def init_nn(self):
-        self.model = keras.Sequential([
-            keras.layers.Conv2D(16, 5, activation='relu', input_shape=self.n, padding='same'),
-            keras.layers.MaxPool2D(pool_size=(2, 2), padding = 'same'),
-            keras.layers.Conv2D(32, 5, activation='relu', padding='same'),
-            keras.layers.MaxPool2D(pool_size=(2, 2), padding='same'),
-            keras.layers.Conv2D(64, 5, activation='relu', padding='same'),
-            keras.layers.MaxPool2D(pool_size=(2, 2), padding='same'),
-            keras.layers.Flatten(),
-            keras.layers.Dropout(rate=0.1),
-            keras.layers.Dense(100, activation='relu'),
-            keras.layers.Dropout(rate=0.1),
-            keras.layers.Dense(self.y_train.shape[1], activation='softmax')
-        ])
+        # self.model = keras.Sequential([
+        #     keras.layers.Conv2D(16, 5, activation='relu', input_shape=self.n, padding='same'),
+        #     keras.layers.MaxPool2D(pool_size=(2, 2), padding = 'same'),
+        #     keras.layers.Conv2D(32, 5, activation='relu', padding='same'),
+        #     keras.layers.MaxPool2D(pool_size=(2, 2), padding='same'),
+        #     keras.layers.Conv2D(64, 5, activation='relu', padding='same'),
+        #     keras.layers.MaxPool2D(pool_size=(2, 2), padding='same'),
+        #     keras.layers.Flatten(),
+        #     keras.layers.Dropout(rate=0.1),
+        #     keras.layers.Dense(100, activation='relu'),
+        #     keras.layers.Dropout(rate=0.1),
+        #     keras.layers.Dense(self.y_train.shape[1], activation='softmax')
+        # ])
+        #
+        # self.model.compile(
+        #     optimizer=keras.optimizers.Adam(lr=self.lr),
+        #     loss='categorical_crossentropy',
+        #     metrics=['categorical_accuracy']
+        # )
+        #
+        # print('Initialized basic net:')
+        # self.model.summary()
+        input = keras.layers.Input(shape=self.n)
+        mobile_net = keras.applications.mobilenet_v2.MobileNetV2(
+            include_top=False,
+            weights='imagenet',
+            input_shape=self.n,
+            input_tensor=input,
+            pooling='avg'
+        )
+        dropout = keras.layers.Dropout(rate=0.1)(mobile_net.output)
+        output = keras.layers.Dense(11, activation='softmax')
 
+        self.model = keras.models.Model(
+            inputs=[input],
+            outputs=[output]
+        )
         self.model.compile(
             optimizer=keras.optimizers.Adam(lr=self.lr),
             loss='categorical_crossentropy',
             metrics=['categorical_accuracy']
         )
 
-        print('Initialized basic net:')
-        self.model.summary()
+        print('Initialized mobile net')
 
     def train(self, epochs=100, batch_size=100):
         started = time()
