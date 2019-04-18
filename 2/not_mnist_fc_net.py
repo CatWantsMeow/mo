@@ -212,6 +212,17 @@ class FullyConnectedNet(object):
         with open(self.history_path, 'w+') as f:
             json.dump(results, f, indent=4)
 
+    def get_wrong_predictions(self):
+        print(f'Evaluating of net on {len(self.x_test)} samples')
+
+        with tf.Session() as session:
+            self.saver.restore(session, self.model_path)
+            return self.predicted.eval({
+                self.input: self.x_test,
+                self.expected: self.y_test,
+                self.dropout_rate: 0
+            })
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -226,14 +237,14 @@ if __name__ == '__main__':
     if args.net == 'basic':
         net = FullyConnectedNet(
             labels, img_train, labels_train, img_test, labels_test,
-            model_path='models/not_mnist_fc_net_basic/model',
+            model_path='models/not_mnist_fc_net_basic/model.ckpt',
             results_path='results/not_mnist_fc_net_basic.json',
         )
 
     elif args.net == 'dropout':
         net = FullyConnectedNet(
             labels, img_train, labels_train, img_test, labels_test,
-            model_path='models/not_mnist_fc_net_dropout/model',
+            model_path='models/not_mnist_fc_net_dropout/model.ckpt',
             results_path='results/not_mnist_fc_net_dropout.json',
             dropout=True,
             regularization=True
@@ -242,7 +253,7 @@ if __name__ == '__main__':
     if args.net == 'adaptive_lr':
         net = FullyConnectedNet(
             labels, img_train, labels_train, img_test, labels_test,
-            model_path='models/not_mnist_fc_net_adaptive_lr/model',
+            model_path='models/not_mnist_fc_net_adaptive_lr/model.ckpt',
             results_path='results/not_mnist_fc_net_adaptive_lr.json',
             learning_rate=1e-3,
             dropout=True,
