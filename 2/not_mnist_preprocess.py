@@ -5,9 +5,11 @@ from PIL import Image
 
 
 def load_images(path, n):
-    labels, x, y = [], [], []
-    for i, d in enumerate(Path(path).iterdir()):
-        labels.append(d.name)
+    labels = ['I', 'G', 'A', 'F', 'H', 'J', 'C', 'D', 'E', 'B']
+
+    x, y = [], []
+    for i, l in enumerate(labels):
+        d = Path(path) / l
         print(f'Loading {str(d)} ', end='')
         for j, f in zip(range(n), d.iterdir()):
             try:
@@ -55,3 +57,7 @@ def load_not_mnist_data(path='data/not_mnist/', use_cache=True):
         np.savez(test_cache_file, labels, img_test, labels_test)
 
     return labels, img_train, labels_train, img_test, labels_test
+
+
+if __name__ == '__main__':
+    load_not_mnist_data()
