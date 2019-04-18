@@ -45,9 +45,9 @@ if __name__ == '__main__':
 
     download_data(*train_large)
     download_data(*test_large)
-    download_data(*extra_large)
+    # download_data(*extra_large)
 
     extract_data(train_large[1])
     extract_data(test_large[1])
-    extract_data(extra_large[1])
+    # extract_data(extra_large[1])
 
