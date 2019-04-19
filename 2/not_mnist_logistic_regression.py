@@ -43,7 +43,7 @@ def train():
             indices = np.random.choice(indices, n, replace=False)
 
         # model = SGDClassifier(loss='log', tol=1e-4, early_stopping=True)
-        model = LogisticRegression(solver="saga", multi_class="multinomial")
+        model = LogisticRegression()
         model.fit(x_train[indices], y_train[indices])
 
         y_pred = model.predict(x_val)
